@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Voice-to-Text Converter</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #4A90E2;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            font-size: 1.8em;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Container */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h2 {
+            font-size: 2em;
+            text-align: center;
+            color: #4A90E2;
+        }
+
+        .container p {
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .container textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            resize: none;
+        }
+
+        .container button {
+            padding: 10px 20px;
+            background-color: #4A90E2;
+            color: white;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .container button:disabled {
+            background-color: #bbb;
+            cursor: not-allowed;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #4A90E2;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #2E2E2E;
+            color: white;
+        }
+
+        body.dark-mode .container {
+            background-color: #3B3B3B;
+        }
+
+        body.dark-mode .fab {
+            background-color: #357ABD;
+        }
+
+        body.dark-mode nav {
+            background-color: #333;
+        }
+
+        body.dark-mode nav h1 {
+            color: white;
+        }
+
+        body.dark-mode nav ul li a {
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <h1>Smart Voice-to-Text</h1>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#transcription">Transcription</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="#help">Help</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home">
+            <h2>Welcome to Smart Voice-to-Text Converter</h2>
+            <p>This app allows you to convert your voice into text and save it as a document. Speak and the app will transcribe your speech into text in real time.</p>
+        </section>
+
+        <!-- Transcription Section -->
+        <section id="transcription">
+            <h2>Voice-to-Text Transcription</h2>
+            <textarea id="transcriptionArea" placeholder="Your transcribed text will appear here..." disabled></textarea>
+            <button id="startBtn">Start Recording</button>
+            <button id="stopBtn" disabled>Stop Recording</button>
+            <button id="saveTextBtn" disabled>Save Transcription</button>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings">
+            <h2>Settings</h2>
+            <label for="darkModeToggle">Enable Dark Mode:</label>
+            <input type="checkbox" id="darkModeToggle">
+        </section>
+
+        <!-- Help Section -->
+        <section id="help">
+            <h2>Help</h2>
+            <p>If you're having trouble, please refer to our guide on how to use the voice-to-text transcription app.</p>
+        </section>
+    </div>
+
+    <!-- Floating Action Button (FAB) -->
+    <div class="fab" id="fabBtn">
+        🎤
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Smart Voice-to-Text App. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let recognition;
+        let isRecording = false;
+        let transcriptionText = '';
+
+        // Initialize Speech Recognition
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function(event) {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    let transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript + ' ';
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                transcriptionText = finalTranscript + interimTranscript;
+                document.getElementById('transcriptionArea').value = transcriptionText;
+            };
+
+            recognition.onend = function() {
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+                document.getElementById('saveTextBtn').disabled = false;
+            };
+        }
+
+        // Start and Stop Recording
+        document.getElementById('fabBtn').addEventListener('click', function() {
+            if (isRecording) {
+                recognition.stop();
+                isRecording = false;
+                document.getElementById('fabBtn').textContent = '🎤';
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+            } else {
+                recognition.start();
+                isRecording = true;
+                document.getElementById('fabBtn').textContent = '⏹️';
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+            }
+        });
+
+        // Dark Mode Toggle
+        document.getElementById('darkModeToggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+
+        // Save Transcription
+        document.getElementById('saveTextBtn').addEventListener('click', function() {
+            const blob = new Blob([transcriptionText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'transcription.txt';
+            link.click();
+        });
+    </script>
+
+</body>
+</html>
