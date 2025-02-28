@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetext</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <img src="‪C:\Users\PC World\Downloads\audio.jpeg">
+    <div id="app">
+        <!-- Slide 1: Welcome -->
+        <div class="slide active" id="slide1">
+            <h1>Welcome to Meetext!</h1>
+            <p>Now you can easily convert the recorded audio into text.</p>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <!-- Slide 2: Speak to Record -->
+        <div class="slide" id="slide2">
+            <h2>Speak to Record</h2>
+            <button id="recordButton" onclick="startRecording()">Speak</button>
+            <button id="stopButton" onclick="stopRecording()" disabled>Stop</button>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <!-- Slide 3: Recorded Meetings/Lectures -->
+        <div class="slide" id="slide3">
+            <h2>Recorded Meetings/Lectures</h2>
+            <p>View and manage your recordings.</p>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <!-- Slide 4: Listen Recorded Audio -->
+        <div class="slide" id="slide4">
+            <h2>Listen to Recorded Audio</h2>
+            <button onclick="playAudio()">Play</button>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <!-- Slide 5: Generate Text -->
+        <div class="slide" id="slide5">
+            <h2>Generate Text</h2>
+            <button onclick="generateText()">Generate Text</button>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <!-- Slide 6: Here you are -->
+        <div class="slide" id="slide6">
+            <h2>Here you are</h2>
+            <p id="generatedText">[Your transcribed text will appear here]</p>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <!-- Slide 7: Thank You -->
+        <div class="slide" id="slide7">
+            <h2>Thank you! We hope it helps you.</h2>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <!-- Slide 8: Feedback -->
+        <div class="slide" id="slide8">
+            <h2>Feedback</h2>
+            <p>Rate Us:</p>
+            <div class="stars">
+                <button onclick="rate(1)">* Very Bad</button>
+                <button onclick="rate(2)">** Bad</button>
+                <button onclick="rate(3)">*** Good</button>
+                <button onclick="rate(4)">**** Better</button>
+                <button onclick="rate(5)">***** Best</button>
+            </div>
+            <button onclick="nextSlide()">Next</button>
+        </div>
+
+        <!-- Slide 9: Visit Again -->
+        <div class="slide" id="slide9">
+            <h2>Visit Again!</h2>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
